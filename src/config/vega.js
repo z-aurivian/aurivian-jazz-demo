@@ -1,91 +1,80 @@
-// VEGA — Strategic Analytics agent.
-// Implements the "must-have" measures from the Aurivian extended analytics
-// document (Vision Doc, Strategic Analytics, Section 5).
-//
-// Default fill: Alexion (template example). Overwrite per demo.
+// VEGA — Strategic Analytics agent — Jazz demo.
+// Social signal velocity and KOL public-private alignment are the headline VEGA story.
 
-// 1.1 HCP Awareness Progression — movement of HCPs along the awareness ladder.
 export const VEGA_AWARENESS_PROGRESSION = {
-  benchmark: '37% of HCPs achieving sustained practice change vs 22% industry average — +68% outperformance. Slowest conversion: Knowledgeable → Intent (68%, avg 47 days). Primary blocker: reimbursement barriers. Recommended action: expedite reimbursement support tools for MSL deployment.',
+  benchmark: '29% of target HCPs achieving sustained practice change vs 22% industry average — +32% outperformance. Slowest conversion: Knowledgeable → Intent (61%, avg 54 days). Primary blocker: H3 K27M testing access barriers at community centers. Recommended action: deploy testing resource kit to community oncology LinkedIn groups and OncologyTribe.',
   stages: [
-    { stage: 'Sustained practice change', hcps: 546,  pctTotal: 37, vsQ4: '+12%' },
-    { stage: 'Actively changing practice', hcps: 613,  pctTotal: 42, vsQ4: '+8%'  },
-    { stage: 'Intent to change',           hcps: 863,  pctTotal: 59, vsQ4: '+5%'  },
-    { stage: 'Knowledgeable',              hcps: 1269, pctTotal: 87, vsQ4: '+4%'  },
-    { stage: 'Aware only',                 hcps: 436,  pctTotal: 30, vsQ4: '-14%' },
+    { stage: 'Sustained practice change', hcps: 312,  pctTotal: 29, vsQ4: '+9%'  },
+    { stage: 'Actively changing practice', hcps: 441,  pctTotal: 41, vsQ4: '+11%' },
+    { stage: 'Intent to change',           hcps: 658,  pctTotal: 61, vsQ4: '+7%'  },
+    { stage: 'Knowledgeable',              hcps: 934,  pctTotal: 87, vsQ4: '+5%'  },
+    { stage: 'Aware only',                 hcps: 378,  pctTotal: 35, vsQ4: '-8%'  },
   ],
 };
 
-// 1.2 Interaction Quality vs Quantity — by MSL/Region.
 export const VEGA_INTERACTION_QUALITY = {
-  insight: 'James T shows high interaction volume but low quality — conversations are not generating usable insights or HCP stage progression. Likely cause: off-KIQ conversations. Recommended: targeted KIQ briefing and joint field visit. Priya K shows both volume and quality gaps — regional manager review recommended.',
+  insight: 'Marcus R shows high interaction volume but below-average social signal follow-up rate — MSL conversations are generating insights that are not being cross-referenced against KOL public social activity. Priya N shows excellent quality and social monitoring integration. Recommended: MSL training on LP6 social alignment protocol.',
   rows: [
-    { msl: 'Sarah M',  region: 'London',     interactions: 47, vsTarget: '+5%',  quality: 8.7, insightRate: 81, overall: 'Excellent' },
-    { msl: 'James T',  region: 'Midlands',   interactions: 52, vsTarget: '+16%', quality: 6.1, insightRate: 44, overall: 'Quality gap' },
-    { msl: 'Anna R',   region: 'North',      interactions: 38, vsTarget: '-15%', quality: 9.1, insightRate: 92, overall: 'Volume gap' },
-    { msl: 'David L',  region: 'Scotland',   interactions: 41, vsTarget: '+2%',  quality: 8.4, insightRate: 78, overall: 'On track' },
-    { msl: 'Priya K',  region: 'South West', interactions: 29, vsTarget: '-36%', quality: 5.2, insightRate: 31, overall: 'Needs support' },
+    { msl: 'Priya N',    region: 'Northeast',  interactions: 44, vsTarget: '+10%', quality: 9.1, insightRate: 87, overall: 'Excellent' },
+    { msl: 'Marcus R',   region: 'Southeast',  interactions: 51, vsTarget: '+21%', quality: 6.3, insightRate: 41, overall: 'Quality gap' },
+    { msl: 'Sofia L',    region: 'Midwest',    interactions: 37, vsTarget: '-8%',  quality: 8.6, insightRate: 79, overall: 'Volume gap' },
+    { msl: 'James W',    region: 'West Coast', interactions: 42, vsTarget: '+5%',  quality: 8.2, insightRate: 74, overall: 'On track' },
+    { msl: 'Anika P',    region: 'South',      interactions: 31, vsTarget: '-23%', quality: 5.8, insightRate: 36, overall: 'Needs support' },
   ],
 };
 
-// 1.3 Engagement Gap Tracker — Tier 1/2 KOLs not contacted within window.
 export const VEGA_ENGAGEMENT_GAPS = [
-  { kol: 'Dr. James Okonkwo', tier: 'Tier 2', lastContact: '2025-03-12', gap: '6 weeks', action: 'Re-engage urgently' },
-  { kol: 'Prof. Linda Walsh', tier: 'Tier 1', lastContact: '2025-03-28', gap: '4 weeks', action: 'Schedule soon' },
-  { kol: 'Dr. Ahmed Hassan',  tier: 'Tier 2', lastContact: '2025-04-02', gap: '3 weeks', action: 'Plan interaction' },
-  { kol: 'Dr. Yuki Tanaka',   tier: 'Tier 1', lastContact: '2025-04-14', gap: '1 week',  action: 'On track' },
+  { kol: 'Dr. R. Venkatramani', tier: 'Tier 2', lastContact: '2026-04-10', gap: '8 weeks', action: 'Re-engage urgently — alignment gap detected' },
+  { kol: 'Dr. B. Nabors',       tier: 'Tier 2', lastContact: '2026-04-28', gap: '5 weeks', action: 'Schedule before ESMO 2025' },
+  { kol: 'Dr. R.T. Shroff',     tier: 'Tier 2', lastContact: '2026-05-12', gap: '3 weeks', action: 'Plan Ziihera BTC interaction' },
+  { kol: 'Dr. S. Mueller',      tier: 'Tier 1', lastContact: '2026-05-28', gap: '1 week',  action: 'On track — pediatric data package ready' },
 ];
 
-// 2.1 Share of Scientific Voice — vs competitors.
 export const VEGA_SHARE_OF_VOICE = {
-  watchArea: 'Social and digital share of voice declining (-3pts) while Competitor B is growing (+7pts). Recommend reviewing digital scientific communication strategy.',
+  watchArea: 'Ziihera social and digital share of voice growing (+23pts in 90 days) but still 26 points behind Enhertu in HER2+ GEC discussions. H3 K27M Modeyso share of voice is dominant in neuro-oncology. Recommend accelerating Ziihera KOL co-creation program on X ahead of GEC launch.',
   rows: [
-    { source: 'Congress abstracts (CROI 2025)', us: '38%',  compA: '28%', compB: '22%', compC: '12%', trend: 'up' },
-    { source: 'Peer-reviewed publications (12m)', us: '34%', compA: '31%', compB: '24%', compC: '11%', trend: 'flat' },
-    { source: 'KOL active endorsements',         us: '41%',  compA: '24%', compB: '26%', compC: '9%',  trend: 'up' },
-    { source: 'Citation index (vs competitors)', us: '2.3×', compA: '1.8×', compB: '1.4×', compC: '0.9×', trend: 'up' },
-    { source: 'Social / digital mentions',       us: '22%',  compA: '19%', compB: '34%', compC: '25%', trend: 'down' },
+    { source: 'Congress abstracts (ASCO 2025)',    us: '44%', compA: '31%', compB: '18%', compC: '7%',  trend: 'up' },
+    { source: 'Peer-reviewed publications (12m)',  us: '38%', compA: '28%', compB: '23%', compC: '11%', trend: 'up' },
+    { source: 'KOL active endorsements',            us: '51%', compA: '22%', compB: '19%', compC: '8%',  trend: 'up' },
+    { source: 'X / LinkedIn mentions (HER2+ GI)',  us: '41%', compA: '67%', compB: '14%', compC: '8%',  trend: 'up' },
+    { source: 'Social / digital (H3 K27M neuro)',  us: '68%', compA: '12%', compB: '11%', compC: '9%',  trend: 'up' },
   ],
 };
 
-// 2.2 KOL Sentiment Velocity — rate-of-change of alignment.
 export const VEGA_SENTIMENT_VELOCITY = [
-  { kol: 'Prof. Sarah Mitchell', score: 89, change30d: '+4.2', velocity: '+1.1 ↑↑', interpretation: 'Positive acceleration — advisory board candidate' },
-  { kol: 'Dr. James Okonkwo',    score: 61, change30d: '-3.8', velocity: '-1.4 ↓↓', interpretation: 'Worsening faster — urgent re-engagement, risk of competitor capture' },
-  { kol: 'Dr. Linda Walsh',      score: 77, change30d: '+1.2', velocity: '-0.6 ⚠',  interpretation: 'Momentum slowing — still improving but decelerating' },
-  { kol: 'Prof. Ahmed Hassan',   score: 82, change30d: '+2.1', velocity: '+0.3 ↑',  interpretation: 'Steady positive — maintain current cadence' },
+  { kol: 'Isabel Arrillaga-Romany', score: 91, change30d: '+3.1', velocity: '+1.2 ↑↑', interpretation: 'Strongly positive — ACTION PI role sustains high alignment; advisory board anchor' },
+  { kol: 'Dr. S. Merchant',         score: 49, change30d: '-8.4', velocity: '-2.1 ↓↓', interpretation: 'Worsening fast — public-private divergence detected; urgent data package deployment' },
+  { kol: 'Yelena Janjigian',        score: 83, change30d: '+2.2', velocity: '+0.8 ↑',  interpretation: 'Steady positive — maintain cadence; KEYNOTE-811 post-hoc engagement opportunity' },
+  { kol: 'Kohei Shitara',           score: 88, change30d: '+1.4', velocity: '+0.4 ↑',  interpretation: 'Stable — HERIZON-GEA-01 PI relationship strong; prioritise Japan PMDA engagement' },
 ];
 
-// 4.1 Care Gap Closure Tracking — patient-level outcome of MA activity.
 export const VEGA_CARE_GAP_CLOSURE = [
-  { gap: 'Biomarker testing rate',   linkedMO: 'MO1',     baseline: '34%',     current: '57% (+23pts)',  patientsImpacted: '2,340 additional patients tested' },
-  { gap: 'Time to treatment',        linkedMO: 'MO1+2',   baseline: '28 days', current: '21 days (-7d)', patientsImpacted: '1,567 patients faster treatment' },
-  { gap: 'Appropriate pt. selection', linkedMO: 'MO2',    baseline: '23% off', current: '12% off (-11pts)', patientsImpacted: '890 patients better selected' },
+  { gap: 'H3 K27M testing rate at community centers', linkedMO: 'MO4',    baseline: '56%',     current: '68% (+12pts)',  patientsImpacted: '~340 additional patients tested per quarter' },
+  { gap: 'Time to Modeyso treatment (diagnosis → Rx)', linkedMO: 'MO1',   baseline: '8.2 wks', current: '6.4 wks (-1.8w)', patientsImpacted: '~180 patients faster treatment initiation' },
+  { gap: 'Ziihera HCP awareness (GEC community onc)', linkedMO: 'MO2',   baseline: '18%',     current: '41% (+23pts)',  patientsImpacted: 'Pre-launch metric — baseline established for launch impact' },
 ];
 
-// 4.2 ROMI — financial framing.
 export const VEGA_ROMI = {
-  netValueCreated: '£15.2M',
-  roiPct: '185%',
-  returnPerPound: '£2.85',
+  netValueCreated: '$18.4M',
+  roiPct: '+212%',
+  returnPerPound: '$3.12',
   rows: [
-    { category: 'Prescription growth attributed to MA', value: '£12.4M', methodology: 'HCPs with high MA engagement show 2.1× higher prescribing — difference-in-difference analysis' },
-    { category: 'Health system efficiency (avoided costs)', value: '£4.2M', methodology: 'Reduced treatment delays, better patient selection, fewer prior authorisation denials' },
-    { category: 'Competitive revenue protection', value: '£6.8M', methodology: 'Estimated prescribing prevented from switching to competitors' },
-    { category: 'Total investment', value: '-£8.2M', methodology: 'Full Medical Affairs budget — field team, advisory boards, congress, content' },
+    { category: 'Modeyso prescription growth attributed to MA', value: '$11.2M', methodology: 'HCPs with high MSL engagement show 2.4× higher Modeyso prescribing — difference-in-difference vs matched controls' },
+    { category: 'Testing barrier removal (H3 K27M)',            value: '$3.8M',  methodology: 'Incremental patients reaching treatment through testing rate improvement; avg Modeyso treatment value applied' },
+    { category: 'Ziihera pre-launch HCP priming',               value: '$7.6M',  methodology: 'Estimated launch-quarter revenue uplift from pre-launch awareness building (41% → 60% target)' },
+    { category: 'Total MA investment',                           value: '-$4.2M', methodology: 'Full Medical Affairs budget — field team, advisory boards, social listening, congress, content' },
   ],
 };
 
-// 4.3 Medical Affairs Impact Index — composite executive headline metric.
 export const VEGA_IMPACT_INDEX = {
-  overall: 82,
-  vsQ4: '+7',
+  overall: 74,
+  vsQ4: '+11',
   target: 80,
   dimensions: [
-    { dim: 'Execution excellence',     score: 87, commentary: 'Above target — field interactions, content, advisory boards all exceeding benchmarks' },
-    { dim: 'External ecosystem impact', score: 84, commentary: '+21% KOL network expansion, +18% total HCP engagement, share of voice up to 38%' },
-    { dim: 'HCP practice change',      score: 81, commentary: '37% sustained change vs 22% industry average — strong outperformance' },
-    { dim: 'Patient care gap closure', score: 79, commentary: 'Biomarker testing +23pts, treatment delay -7 days, appropriate selection +11pts' },
-    { dim: 'Internal ecosystem impact', score: 78, commentary: 'Clinical Development collaboration below potential — key improvement opportunity' },
+    { dim: 'Execution excellence',      score: 81, commentary: 'MSL interaction volume above target; quality gap in Southeast region being addressed' },
+    { dim: 'External ecosystem impact', score: 79, commentary: '+18% KOL network expansion; 23 new social influencer accounts identified and mapped' },
+    { dim: 'HCP practice change',       score: 72, commentary: '29% sustained change vs 22% industry average; H3 K27M testing rate improvement is the primary driver' },
+    { dim: 'Patient care gap closure',  score: 70, commentary: 'Testing rate +12pts, treatment delay -1.8 weeks; Ziihera pre-launch awareness baseline established' },
+    { dim: 'Social signal intelligence', score: 68, commentary: 'New capability — social listening now tracking 23 HCP accounts; LP6 alignment protocol not yet fully operationalized' },
   ],
 };

@@ -1,23 +1,21 @@
-// Insight Source Value Matrix — NOVA's "Insight Sources & Impact" tab.
-// Quantifies the value of each insight-source channel: volume,
-// quality, leads-to-action, cost, and an aggregated ROI score.
-//
-// Default fill: Alexion (template example). Overwrite per demo.
+// Insight Source Value Matrix — Jazz demo.
+// Social listening is the headline source — the Jazz demo differentiator.
 
 export const INSIGHT_SOURCES = [
-  { id: 'is-1', source: 'MSL Field Reports',  volume: 1243, qualityScore: 82, leadsToActionPct: 41, costPerInsight: 187,  roiScore: 7.8 },
-  { id: 'is-2', source: 'Advisory Boards',    volume: 47,   qualityScore: 94, leadsToActionPct: 72, costPerInsight: 4250, roiScore: 8.5 },
-  { id: 'is-3', source: 'Congress Feedback',  volume: 312,  qualityScore: 76, leadsToActionPct: 34, costPerInsight: 890,  roiScore: 6.2 },
-  { id: 'is-4', source: 'Med Info Inquiries', volume: 876,  qualityScore: 68, leadsToActionPct: 22, costPerInsight: 45,   roiScore: 7.1 },
-  { id: 'is-5', source: 'Social Listening',   volume: 4521, qualityScore: 41, leadsToActionPct: 8,  costPerInsight: 12,   roiScore: 4.4 },
+  { id: 'is-1', source: 'MSL Field Reports',          volume: 876,  qualityScore: 79, leadsToActionPct: 38, costPerInsight: 210,  roiScore: 7.4 },
+  { id: 'is-2', source: 'Advisory Boards',             volume: 34,   qualityScore: 93, leadsToActionPct: 71, costPerInsight: 4800, roiScore: 8.3 },
+  { id: 'is-3', source: 'Congress Feedback',           volume: 241,  qualityScore: 74, leadsToActionPct: 31, costPerInsight: 940,  roiScore: 6.0 },
+  { id: 'is-4', source: 'Med Info Inquiries',          volume: 612,  qualityScore: 65, leadsToActionPct: 19, costPerInsight: 52,   roiScore: 6.8 },
+  { id: 'is-5', source: 'X / LinkedIn Social Listening', volume: 6284, qualityScore: 53, leadsToActionPct: 22, costPerInsight: 8,    roiScore: 7.9 },
+  { id: 'is-6', source: 'Patient Advocacy Monitoring', volume: 1847, qualityScore: 44, leadsToActionPct: 14, costPerInsight: 6,    roiScore: 6.5 },
 ];
 
-// KIT Relevance Trend — 6-month relevance score per KIT.
+// KIT Relevance Trend — 6-month relevance score per Jazz KIT.
 export const KIT_RELEVANCE_TREND = [
-  { month: 'Nov 2025', 'Biosimilar Switching': 88, 'Complement Education': 74, 'BTH Mgmt': 79, 'Oral Competitor': 83, 'Diagnosis & Referral': 69 },
-  { month: 'Dec 2025', 'Biosimilar Switching': 90, 'Complement Education': 73, 'BTH Mgmt': 82, 'Oral Competitor': 86, 'Diagnosis & Referral': 68 },
-  { month: 'Jan 2026', 'Biosimilar Switching': 91, 'Complement Education': 72, 'BTH Mgmt': 85, 'Oral Competitor': 88, 'Diagnosis & Referral': 67 },
-  { month: 'Feb 2026', 'Biosimilar Switching': 93, 'Complement Education': 71, 'BTH Mgmt': 86, 'Oral Competitor': 89, 'Diagnosis & Referral': 67 },
-  { month: 'Mar 2026', 'Biosimilar Switching': 94, 'Complement Education': 72, 'BTH Mgmt': 88, 'Oral Competitor': 91, 'Diagnosis & Referral': 67 },
-  { month: 'Apr 2026', 'Biosimilar Switching': 94, 'Complement Education': 72, 'BTH Mgmt': 88, 'Oral Competitor': 91, 'Diagnosis & Referral': 67 },
+  { month: 'Jan 2026', 'H3 K27M Testing': 71, 'Modeyso RWE': 63, 'Pediatric DMG Gap': 68, 'Ziihera Bispecific': 48, 'Social Signal Velocity': 74 },
+  { month: 'Feb 2026', 'H3 K27M Testing': 75, 'Modeyso RWE': 66, 'Pediatric DMG Gap': 71, 'Ziihera Bispecific': 54, 'Social Signal Velocity': 79 },
+  { month: 'Mar 2026', 'H3 K27M Testing': 80, 'Modeyso RWE': 70, 'Pediatric DMG Gap': 74, 'Ziihera Bispecific': 61, 'Social Signal Velocity': 84 },
+  { month: 'Apr 2026', 'H3 K27M Testing': 86, 'Modeyso RWE': 74, 'Pediatric DMG Gap': 79, 'Ziihera Bispecific': 72, 'Social Signal Velocity': 89 },
+  { month: 'May 2026', 'H3 K27M Testing': 91, 'Modeyso RWE': 77, 'Pediatric DMG Gap': 83, 'Ziihera Bispecific': 81, 'Social Signal Velocity': 94 },
+  { month: 'Jun 2026', 'H3 K27M Testing': 96, 'Modeyso RWE': 88, 'Pediatric DMG Gap': 91, 'Ziihera Bispecific': 94, 'Social Signal Velocity': 98 },
 ];

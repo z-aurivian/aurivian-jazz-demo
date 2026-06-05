@@ -1,56 +1,46 @@
-// Medical Messaging Alignment — LUCA's per-KOL alignment view.
-// Vision Doc Module 3 (KOL Intelligence) — alignment % per messaging pillar
-// plus an AI engagement recommendation tying tier, influence and gaps
-// together.
-//
-// Default fill: Alexion (template example). Overwrite per demo.
+// Medical Messaging Alignment — Jazz demo.
+// Pillars cover both Modeyso (H3 K27M DMG) and Ziihera (HER2+ GEA/BTC).
 
-// The medical messaging pillars the brand is trying to move HCPs toward.
 export const MESSAGING_PILLARS = [
-  { id: 'pillar-1', name: 'C5 inhibition long-term safety',          short: 'C5 safety' },
-  { id: 'pillar-2', name: 'Ultomiris extended dosing convenience',   short: 'Extended dosing' },
-  { id: 'pillar-3', name: 'BTH management & differentiation',        short: 'BTH mgmt' },
-  { id: 'pillar-4', name: 'Diagnostic pathway & guideline alignment', short: 'Guidelines' },
+  { id: 'pillar-1', name: 'Modeyso efficacy in H3 K27M DMG (real-world & trial)',  short: 'Modeyso RWE' },
+  { id: 'pillar-2', name: 'Pediatric & adolescent dosing confidence',               short: 'Pediatric dosing' },
+  { id: 'pillar-3', name: 'Ziihera bispecific HER2 mechanism differentiation',      short: 'Bispecific MoA' },
+  { id: 'pillar-4', name: 'H3 K27M biomarker testing as treatment gatekeeper',      short: 'Biomarker testing' },
 ];
 
-// Stable per-KOL alignment + AI recommendation, derived deterministically
-// from tier + influence + a per-pillar offset on the KOL id hash. Avoids
-// the 18×4 hand-keyed table while giving each KOL distinct values across
-// re-renders and per-pillar realism.
 function hashCode(s) {
   let h = 0;
-  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  for (let i = 0; i < s.length; i++) {
+    h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+  }
   return Math.abs(h);
 }
 
-const TIER_BASELINE = { 'Tier 1': 78, 'Tier 2': 64, 'Tier 3': 50 };
+function pillarAlignment(kolId, pillarIndex, tier, influence) {
+  const base = tier === 'Tier 1' ? 72 : tier === 'Tier 2' ? 58 : 44;
+  const influenceBonus = Math.floor((influence - 70) / 5);
+  const offset = ((hashCode(kolId + pillarIndex) % 24) - 12);
+  return Math.min(99, Math.max(28, base + influenceBonus + offset));
+}
 
-export function getMessagingAlignment(kol) {
-  if (!kol) return null;
-  const baseline = TIER_BASELINE[kol.engagementTier] ?? 60;
-  const influenceLift = Math.round((kol.influenceScore - 70) / 4); // ~ -5..+8
-  const idHash = hashCode(kol.id);
+function aiRecommendation(kol, alignments) {
+  const avg = Math.round(alignments.reduce((a, b) => a + b, 0) / alignments.length);
+  const weakPillar = MESSAGING_PILLARS[alignments.indexOf(Math.min(...alignments))];
+  const strongPillar = MESSAGING_PILLARS[alignments.indexOf(Math.max(...alignments))];
+  if (avg >= 80) return `Strong overall alignment (avg ${avg}%). Leverage ${kol.name} for scientific exchange on ${strongPillar.short} — consider advisory board nomination. Maintain cadence.`;
+  if (avg >= 65) return `Moderate alignment (avg ${avg}%). Gap on "${weakPillar.name}" — schedule targeted scientific exchange before next congress. ${kol.name} is a high-value conversion opportunity.`;
+  return `Alignment gap (avg ${avg}%). "${weakPillar.name}" is the lowest-scoring pillar. Social signal monitoring shows public narrative may diverge from private. Prioritise re-engagement with updated evidence package.`;
+}
 
-  const pillars = MESSAGING_PILLARS.map((p, i) => {
-    // Deterministic per-pillar offset in -15..+15
-    const offset = ((idHash + i * 37) % 31) - 15;
-    const score = Math.max(20, Math.min(98, baseline + influenceLift + offset));
-    return { ...p, score };
+export function getMessagingAlignment(kolData) {
+  return kolData.map(kol => {
+    const alignments = MESSAGING_PILLARS.map((_, i) =>
+      pillarAlignment(kol.id, i, kol.engagementTier, kol.influenceScore)
+    );
+    return {
+      kolId: kol.id,
+      pillars: MESSAGING_PILLARS.map((p, i) => ({ ...p, alignment: alignments[i] })),
+      aiRecommendation: aiRecommendation(kol, alignments),
+    };
   });
-
-  // Identify the largest gap pillar to anchor the recommendation.
-  const gap = pillars.reduce((min, p) => (p.score < min.score ? p : min), pillars[0]);
-  const strongest = pillars.reduce((max, p) => (p.score > max.score ? p : max), pillars[0]);
-  const avgScore = Math.round(pillars.reduce((sum, p) => sum + p.score, 0) / pillars.length);
-
-  let recommendation;
-  if (gap.score >= 75) {
-    recommendation = `Strong alignment across all messaging pillars (avg ${avgScore}%). Maintain current cadence — consider advisory board invitation, particularly on ${strongest.short}.`;
-  } else if (gap.score >= 55) {
-    recommendation = `Average alignment ${avgScore}%. Largest gap is ${gap.name} (${gap.score}%). Recommended: targeted scientific exchange focused on this pillar; bring updated evidence pack.`;
-  } else {
-    recommendation = `Below-target alignment on ${gap.name} (${gap.score}%). Suggest urgent re-engagement and 1:1 advisory; risk of competitor capture if not addressed within 6 weeks.`;
-  }
-
-  return { pillars, avgScore, gap, strongest, recommendation };
 }
