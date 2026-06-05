@@ -25,7 +25,7 @@ export const VEGA_INTERACTION_QUALITY = {
 
 export const VEGA_ENGAGEMENT_GAPS = [
   { kol: 'Dr. R. Venkatramani', tier: 'Tier 2', lastContact: '2026-04-10', gap: '8 weeks', action: 'Re-engage urgently — alignment gap detected' },
-  { kol: 'Dr. B. Nabors',       tier: 'Tier 2', lastContact: '2026-04-28', gap: '5 weeks', action: 'Schedule before ESMO 2025' },
+  { kol: 'Dr. B. Nabors',       tier: 'Tier 2', lastContact: '2026-04-28', gap: '5 weeks', action: 'Schedule before ESMO 2026' },
   { kol: 'Dr. R.T. Shroff',     tier: 'Tier 2', lastContact: '2026-05-12', gap: '3 weeks', action: 'Plan Ziihera BTC interaction' },
   { kol: 'Dr. S. Mueller',      tier: 'Tier 1', lastContact: '2026-05-28', gap: '1 week',  action: 'On track — pediatric data package ready' },
 ];
