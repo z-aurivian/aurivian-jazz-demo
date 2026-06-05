@@ -1,65 +1,61 @@
-// Predictive Signals — Command Center & NOVA.
-// Replaces the simpler "New Signals" feed. Each signal carries an agent
-// attribution (which agent surfaced it) plus trajectory / confidence /
-// time-to-impact framing borrowed from the Alexion Momentum Indicators
-// pattern.
-//
-// Default fill: Alexion (template example). Overwrite per demo.
+// Predictive Signals — Jazz demo.
+// Social media signal velocity is the headline capability.
+// Signals blend X/LinkedIn/ResearchGate monitoring with MSL and congress feeds.
 
 export const PREDICTIVE_SIGNALS = [
   {
     id: 'ps-1',
-    agent: 'NOVA',
-    signal: 'Biosimilar formulary displacement accelerating',
-    currentState: 'Three major US PBMs have excluded originator Soliris from 2026 national formularies. EU5 markets show 35% biosimilar penetration in new patient starts.',
-    trajectory: 'rising',
-    timeToImpact: '0–6 months',
-    confidence: 'high',
-    requiredAction: 'Accelerate Soliris→Ultomiris conversion outreach to prescribers managing stable patients at risk of forced biosimilar switching.',
-    suggestedAction: { label: 'Open in NOVA', path: '/insights' },
-  },
-  {
-    id: 'ps-2',
     agent: 'ARIA',
-    signal: 'Competitor symposium added at EHA 2026 (iptacopan)',
-    currentState: 'Late-breaking PNH extension data announced. No equivalent Alexion session currently scheduled in that room.',
+    signal: 'Social signal velocity spike: #H3K27M on X (+310% in 14 days)',
+    currentState: 'Following ASCO 2025 abstract drops, mentions of H3 K27M and dordaviprone surged 310% on X. Dominant voices: 7 neuro-oncology KOLs + 3 patient advocacy accounts. Tone: 82% positive framing around Modeyso efficacy.',
     trajectory: 'rising',
     timeToImpact: '0–3 months',
     confidence: 'high',
-    requiredAction: 'Brief MSL team before session. Prepare response talking points and an evidence one-pager.',
+    requiredAction: 'Deploy rapid MSL response team to amplify accurate clinical narrative on X/LinkedIn. Prepare citable real-world evidence thread for KOL repost.',
     suggestedAction: { label: 'Open in ARIA', path: '/congress' },
   },
   {
-    id: 'ps-3',
+    id: 'ps-2',
     agent: 'LUCA',
-    signal: 'Sentiment shift: Dr. K. Rhee toward C5 sequencing in NMOSD',
-    currentState: 'Two recent congress talks and one podcast indicate shifting preference on sequencing C5 vs IL-6 inhibition.',
+    signal: 'KOL alignment gap detected: Dr. S. Merchant (public vs. private)',
+    currentState: 'LUCA detects a divergence between Dr. Merchant\'s public LinkedIn posts (cautious on Modeyso in pediatric DMG) and two recent MSL interactions where she expressed positive enthusiasm. Alignment score dropped from 78 → 49.',
     trajectory: 'rising',
-    timeToImpact: '3–6 months',
+    timeToImpact: '0–3 months',
     confidence: 'medium',
-    requiredAction: 'Schedule scientific exchange focused on C5 sequencing data; prepare advisory board invitation.',
+    requiredAction: 'Schedule scientific exchange to understand her unmet evidence needs. Provide pediatric DMG data package before she publishes a perspective piece.',
     suggestedAction: { label: 'Open in LUCA', path: '/kol' },
   },
   {
-    id: 'ps-4',
+    id: 'ps-3',
     agent: 'NOVA',
-    signal: 'Recurrence threshold hit: infusion-burden switch hesitancy',
-    currentState: 'Insight AI1 recorded a third source this month — now at Prioritised status. Strategy-to-Action recommends community-facing switching materials.',
+    signal: 'Ziihera HER2 conversation share rising on LinkedIn ahead of GEC data',
+    currentState: 'Zanidatamab is mentioned in 41% of HER2+ GEC LinkedIn discussions among GI oncologists — up from 18% 90 days ago. Trastuzumab deruxtecan (Enhertu) still leads at 67%. Sentiment toward zanidatamab bispecific mechanism: 74% favorable.',
     trajectory: 'rising',
     timeToImpact: '3–6 months',
     confidence: 'high',
-    requiredAction: 'Approve patient-facing switching one-pager; deploy community KIT to MSL field team.',
+    requiredAction: 'Surface bispecific differentiation content into social channels ahead of GEC launch. Brief GI KOLs with mechanism one-pager for organic amplification.',
     suggestedAction: { label: 'Review in NOVA', path: '/insights' },
   },
   {
-    id: 'ps-5',
+    id: 'ps-4',
     agent: 'LUCA',
-    signal: '2 emerging NMOSD KOLs crossed the watch threshold',
-    currentState: 'Publication cadence and congress-speaking frequency both up 40% vs prior 6 months. Neither is currently on the NMOSD engagement list.',
+    signal: '3 emerging neuro-oncology digital influencers crossed the 5K follower threshold',
+    currentState: 'Three neuro-oncologists (combined 18K X followers) have posted ≥4 times about H3 K27M mutation testing in the past 30 days. None are on the current MSL engagement list. Posting cadence and engagement rates are trending toward tier-2 KOL territory.',
     trajectory: 'rising',
     timeToImpact: '3–6 months',
     confidence: 'medium',
-    requiredAction: 'Add to LUCA watch list; assign MSL for initial outreach.',
+    requiredAction: 'Add all three to LUCA watch list. Prioritize outreach for two with academic affiliation. Consider inviting to digital advisory board.',
     suggestedAction: { label: 'Open in LUCA', path: '/kol' },
+  },
+  {
+    id: 'ps-5',
+    agent: 'NOVA',
+    signal: 'RWE evidence gap amplified in patient advocacy social channels',
+    currentState: 'National Brain Tumor Society and Pediatric Brain Tumor Foundation communities on Facebook and X are actively discussing gaps in pediatric Modeyso dosing data. Combined reach: ~120K patient and caregiver followers. Mentions spiked after a patient-shared journal club post.',
+    trajectory: 'rising',
+    timeToImpact: '3–6 months',
+    confidence: 'high',
+    requiredAction: 'Engage NBTS and PBTF medical liaison contacts. Offer RWE update webinar for patient community. Monitor for misinformation and prepare response protocol.',
+    suggestedAction: { label: 'Review in NOVA', path: '/insights' },
   },
 ];
