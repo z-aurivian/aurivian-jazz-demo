@@ -2,111 +2,121 @@ import { queryClaudeAPI } from './claudeApi';
 import { queryOpenAIAPI } from './openaiApi';
 import { buildSystemPrompt } from './promptBuilder';
 import { retrieveContext } from './rag';
-import { KIT_SCORECARDS, COMPETITOR_DATA, KOL_DATA } from '../data/demoData';
-import { STRATEGIC_IMPERATIVES, COMPETITIVE_LANDSCAPE, PIPELINE_INTELLIGENCE } from '../data/strategicContent';
-import { PUBMED_SOLIRIS, PUBMED_ULTOMIRIS } from '../data/pubmedData';
-import { TRIALS_SOLIRIS, TRIALS_ULTOMIRIS, TRIALS_COMPLETED_LANDMARK } from '../data/clinicalTrialsData';
-import { MOCK_INGESTION, MOCK_THEMES, MOCK_COMPETITOR_VISIBILITY, MOCK_TREND_SENTIMENT, MOCK_SOCIAL } from '../data/congressData';
-import { CLIENT, CONGRESS_OPTIONS } from '../config/clientConfig';
+import {
+  KIT_SCORECARDS,
+  KOL_DATA,
+  INSIGHTS,
+  ACTIONS,
+  CLIENT,
+  PRODUCT_OPTIONS,
+  CONGRESS_OPTIONS,
+} from '../config';
 
 function keywordFallback(query, selectedProduct) {
   const q = query.toLowerCase();
-  const kits = KIT_SCORECARDS[selectedProduct] || [];
-  const competitors = COMPETITOR_DATA[selectedProduct] || [];
-  const kols = KOL_DATA.filter(k => k.productAlignment.includes(selectedProduct));
+  const product = PRODUCT_OPTIONS.find(p => p.id === selectedProduct) || PRODUCT_OPTIONS[0];
+  const productKols = KOL_DATA.filter(k =>
+    !selectedProduct || k.productAlignment.includes(selectedProduct)
+  );
 
-  if (q.includes('biosimilar') || q.includes('switching')) {
-    const kit = kits.find(k => k.name.toLowerCase().includes('biosimilar'));
-    return `## Biosimilar Switching Readiness\n\n${kit ? kit.aiSummaryCurrent : 'Biosimilar eculizumab products (Bkemv by Samsung Bioepis, Epysqli by Amgen) launched in 2025, creating significant pressure on the Soliris franchise.'}\n\n**Key Metrics:**\n- Mentions: ${kit?.currentMentions || 'N/A'} (${kit?.percentChange > 0 ? '+' : ''}${kit?.percentChange || 'N/A'}% vs prior month)\n- Sentiment: ${kit?.currentSentiment || 'N/A'}\n- Status: ${kit?.status || 'N/A'}\n\nThe urgency of Soliris→Ultomiris conversion is a top priority for franchise defense. MSL teams report increasing HCP inquiries about biosimilar interchangeability and switching protocols.`;
-  }
-
-  if (q.includes('compet') || q.includes('oral') || q.includes('threat')) {
-    let response = '## Competitive Landscape Overview\n\n';
-    if (COMPETITIVE_LANDSCAPE) {
-      response += COMPETITIVE_LANDSCAPE.map(c =>
-        `### ${c.name} (${c.genericName}) — ${c.company}\n${c.summary}\n- **Threat Level:** ${c.strategicThreatLevel}\n- **Approved:** ${c.approvedIndications?.join(', ') || 'Varies by market'}`
-      ).join('\n\n');
-    } else {
-      response += competitors.map(c =>
-        `### ${c.name} (${c.genericName}) — ${c.company}\n${c.aiSummaryCurrent}\n- Mentions: ${c.mentions}, Sentiment: ${c.sentiment}`
-      ).join('\n\n');
-    }
-    return response;
-  }
-
-  if (q.includes('kol') || q.includes('opinion leader') || q.includes('expert')) {
-    const topKols = kols.filter(k => k.engagementTier === 'Tier 1').slice(0, 5);
-    return `## Top KOLs for ${selectedProduct === 'soliris' ? 'Soliris' : 'Ultomiris'}\n\n${topKols.map(k =>
-      `### ${k.name}\n- **Institution:** ${k.institution}, ${k.country}\n- **Specialty:** ${k.specialty}\n- **Influence Score:** ${k.influenceScore}/100\n- **Focus Areas:** ${k.focusAreas.join(', ')}\n- **Recommended Strategy:** ${k.recommendedStrategy}`
-    ).join('\n\n')}\n\n*${kols.length} total KOLs tracked for this product.*`;
-  }
-
-  if (q.includes('sentiment') || q.includes('trend')) {
-    return `## Sentiment & Trend Analysis\n\n${kits.map(k =>
-      `- **${k.name}**: Sentiment ${k.currentSentiment} (was ${k.priorSentiment}), ${k.percentChange > 0 ? '↑' : k.percentChange < 0 ? '↓' : '→'} ${Math.abs(k.percentChange)}% change. ${k.aiSummaryCurrent}`
+  // KITs / signal velocity
+  if (
+    q.includes('kit') || q.includes('signal') || q.includes('velocity') ||
+    q.includes('theme') || q.includes('trend') || q.includes('what is happening') ||
+    q.includes('what\'s happening')
+  ) {
+    return `## Key Insight Themes (KITs)\n\n${KIT_SCORECARDS.map(k =>
+      `### ${k.name}\n- **Status:** ${k.status} | Mentions: ${k.currentMentions} (${k.percentChange > 0 ? '+' : ''}${k.percentChange.toFixed(1)}% vs prior)\n- **Sentiment:** ${k.currentSentiment.toFixed(2)} (was ${k.priorSentiment.toFixed(2)})\n\n${k.aiSummaryCurrent}`
     ).join('\n\n')}`;
   }
 
-  if (q.includes('pipeline') || q.includes('gefurulimab') || q.includes('danicopan') || q.includes('voydeya')) {
-    if (PIPELINE_INTELLIGENCE) {
-      return `## Pipeline Intelligence\n\n${PIPELINE_INTELLIGENCE.map(p =>
-        `### ${p.name}\n- **Mechanism:** ${p.mechanism}\n- **Stage:** ${p.stage}\n- **Indication:** ${p.indication}\n- **Timeline:** ${p.expectedTimeline}\n- **Significance:** ${p.significance}`
-      ).join('\n\n')}`;
-    }
+  // KOL alignment / social divergence
+  if (
+    q.includes('alignment') || q.includes('diverge') || q.includes('public') ||
+    q.includes('private') || q.includes('merchant') || q.includes('social media') ||
+    q.includes('twitter') || q.includes('linkedin') || q.includes('x.com')
+  ) {
+    const alignmentInsight = INSIGHTS.find(i => i.id === 'AI1');
+    return `## KOL Public–Private Alignment\n\n${alignmentInsight ? alignmentInsight.summary : ''}\n\n**Top Tier 1 KOLs tracked for ${product.name}:**\n${productKols.filter(k => k.engagementTier === 'Tier 1').slice(0, 5).map(k =>
+      `- **${k.name}** (${k.institution}): ${k.focusAreas[0]}`
+    ).join('\n')}\n\nOpen LUCA for full per-KOL alignment scores and messaging gap breakdown.`;
   }
 
-  if (q.includes('strateg') || q.includes('imperative') || q.includes('priority')) {
-    if (STRATEGIC_IMPERATIVES) {
-      return `## Strategic Imperatives\n\n${STRATEGIC_IMPERATIVES.map(s =>
-        `### ${s.name} (${s.category})\n${s.description}\n\n**Success Metrics:** ${s.successMetrics?.join(', ')}`
-      ).join('\n\n')}`;
-    }
-  }
-
-  if (q.includes('publi') || q.includes('paper') || q.includes('journal') || q.includes('literature') || q.includes('pubmed')) {
-    const pubs = selectedProduct === 'soliris' ? PUBMED_SOLIRIS : PUBMED_ULTOMIRIS;
-    const productName = selectedProduct === 'soliris' ? 'Soliris (eculizumab)' : 'Ultomiris (ravulizumab)';
-    return `## Recent Publications — ${productName}\n\nBased on real PubMed data (sourced Feb 2026):\n\n${pubs.slice(0, 10).map((p, i) =>
-      `${i + 1}. **${p.title}**\n   - ${p.authors.slice(0, 3).join(', ')}${p.authors.length > 3 ? ' et al.' : ''}\n   - *${p.journal}* (${p.pubDate})\n   - PMID: ${p.pmid}${p.doi ? ` | DOI: ${p.doi}` : ''}`
-    ).join('\n\n')}\n\n*${pubs.length} total publications tracked.*`;
-  }
-
-  if (q.includes('trial') || q.includes('clinical') || q.includes('recruit')) {
-    const trials = selectedProduct === 'soliris' ? TRIALS_SOLIRIS : TRIALS_ULTOMIRIS;
-    const productName = selectedProduct === 'soliris' ? 'Soliris (eculizumab)' : 'Ultomiris (ravulizumab)';
-    return `## Active Clinical Trials — ${productName}\n\nBased on real ClinicalTrials.gov data (sourced Feb 2026):\n\n${trials.slice(0, 8).map((t, i) =>
-      `${i + 1}. **${t.title}**\n   - ${t.nctId} | ${t.status} | ${t.phase || 'N/A'}\n   - Sponsor: ${t.sponsor}\n   - Enrollment: ${t.enrollment} | Completion: ${t.completionDate || 'TBD'}`
-    ).join('\n\n')}\n\n*${trials.length} active trials tracked.*`;
-  }
-
-  if (q.includes('landmark') || q.includes('pivotal')) {
-    return `## Landmark Clinical Trials\n\n${TRIALS_COMPLETED_LANDMARK.slice(0, 10).map((t, i) =>
-      `${i + 1}. **${t.title}**\n   - ${t.nctId} | ${t.status} | ${t.phase || 'N/A'}\n   - Sponsor: ${t.sponsor} | Enrollment: ${t.enrollment}`
+  // Insights
+  if (
+    q.includes('insight') || q.includes('finding') || q.includes('gap') ||
+    q.includes('risk') || q.includes('issue') || q.includes('concern')
+  ) {
+    return `## Strategic Insights\n\n${INSIGHTS.map(i =>
+      `### ${i.title}\n**Priority:** ${i.priority} | **Confidence:** ${Math.round(i.confidenceScore * 100)}% | **Signal velocity:** ${i.socialSignalVelocity || 'N/A'}\n\n${i.summary}`
     ).join('\n\n')}`;
   }
 
-  // Congress ingestion
-  if (q.includes('congress') || q.includes('ingestion') || q.includes('abstract') || q.includes('poster')) {
-    const congressNames = CONGRESS_OPTIONS.filter(c => c.available).map(c => c.name).join(', ');
-    return `## Congress Intelligence Overview\n\nTracked congresses: ${congressNames}\n\n**Ingestion Pipeline:**\n- Abstracts: ${MOCK_INGESTION.abstracts}\n- Posters: ${MOCK_INGESTION.posters}\n- Speakers identified: ${MOCK_INGESTION.speakers}\n- Publications linked: ${MOCK_INGESTION.publicationsLinked}\n- Agendas processed: ${MOCK_INGESTION.agendas}\n\n**Social Signals:** ${MOCK_SOCIAL.totalSignals} total signals tracked (${MOCK_SOCIAL.positive}% positive, ${MOCK_SOCIAL.negative}% negative)\n\nAsk me about scientific themes, competitor visibility, or sentiment trends from congress data.`;
-  }
-
-  // Congress themes
-  if (q.includes('theme') || q.includes('scientific theme')) {
-    return `## Scientific Themes at Congress\n\n${MOCK_THEMES.map((t, i) =>
-      `${i + 1}. **${t.theme}**\n   - Mentions: ${t.mentions} | Sentiment: ${t.sentiment}`
+  // Actions / recommendations
+  if (
+    q.includes('action') || q.includes('recommend') || q.includes('next step') ||
+    q.includes('should we') || q.includes('what should') || q.includes('priority') ||
+    q.includes('deploy') || q.includes('engage')
+  ) {
+    return `## Recommended Actions\n\n${ACTIONS.map(a =>
+      `### ${a.id}: ${a.title}\n- **Owner:** ${a.owner} | **Due:** ${a.dueBy} | **Status:** ${a.status}${a.strategyImpact ? ` | **Impact:** ${a.strategyImpact}` : ''}`
     ).join('\n\n')}`;
   }
 
-  // Congress competitor visibility
-  if (q.includes('visibility')) {
-    return `## Competitor Visibility at Congress\n\n${MOCK_COMPETITOR_VISIBILITY.map((c, i) =>
-      `${i + 1}. **${c.product}**\n   - Share of voice: ${c.share}%\n   - Mentions: ${c.mentions}`
-    ).join('\n\n')}`;
+  // KOLs
+  if (
+    q.includes('kol') || q.includes('opinion leader') || q.includes('expert') ||
+    q.includes('physician') || q.includes('engagement') || q.includes('who are')
+  ) {
+    const tier1 = productKols.filter(k => k.engagementTier === 'Tier 1').slice(0, 5);
+    const toShow = tier1.length > 0 ? tier1 : KOL_DATA.slice(0, 5);
+    return `## Key Opinion Leaders — ${product.name}\n\n${toShow.map(k =>
+      `### ${k.name}\n- **Institution:** ${k.institution}, ${k.country}\n- **Specialty:** ${k.specialty} | **Influence:** ${k.influenceScore}/100\n- **Focus:** ${k.focusAreas.join(', ')}\n- **Strategy:** ${k.recommendedStrategy}`
+    ).join('\n\n')}\n\n*${productKols.length} total KOLs tracked for this product.*`;
   }
 
-  // Default response
-  return `## Auri Intelligence Summary\n\nI can help you with intelligence about ${CLIENT.name}'s ${CLIENT.franchiseDescription}. Here are some areas I can address:\n\n- **KIT Performance** — ${kits.length} Key Insight Themes tracked this month\n- **Competitive Intelligence** — ${competitors.length} competitors monitored\n- **KOL Management** — ${kols.length} KOLs aligned with current product\n- **Congress Intelligence** — Ingestion pipeline, scientific themes, competitor visibility\n- **Strategic Imperatives** — Strategic priorities with field alignment data\n- **Pipeline Updates** — Emerging assets and competitor pipelines\n\nTry asking about congress themes, competitor visibility, KOL engagement, or sentiment trends.`;
+  // Modeyso / DMG
+  if (
+    q.includes('modeyso') || q.includes('dordaviprone') || q.includes('dmg') ||
+    q.includes('diffuse midline') || q.includes('h3 k27m') || q.includes('h3k27m')
+  ) {
+    const modeyso = PRODUCT_OPTIONS.find(p => p.id === 'modeyso');
+    const modeysoKits = KIT_SCORECARDS.filter(k =>
+      k.name.toLowerCase().includes('modeyso') || k.name.toLowerCase().includes('pediatric') || k.name.toLowerCase().includes('h3')
+    );
+    return `## Modeyso (dordaviprone) Intelligence\n\n**Indication:** ${modeyso?.indications.join(', ')}\n**Stage:** ${modeyso?.stage}\n\n${modeysoKits.map(k =>
+      `### ${k.name}\n${k.aiSummaryCurrent}`
+    ).join('\n\n')}\n\nAsk about KOL engagement strategy, pediatric evidence gaps, or H3 K27M testing barriers for more detail.`;
+  }
+
+  // Ziihera / HER2
+  if (
+    q.includes('ziihera') || q.includes('zanidatamab') || q.includes('btc') ||
+    q.includes('gec') || q.includes('her2') || q.includes('biliary') ||
+    q.includes('gastro') || q.includes('bispecific')
+  ) {
+    const ziihera = PRODUCT_OPTIONS.find(p => p.id === 'ziihera');
+    const ziiheraKits = KIT_SCORECARDS.filter(k =>
+      k.name.toLowerCase().includes('ziihera') || k.name.toLowerCase().includes('her2')
+    );
+    return `## Ziihera (zanidatamab) Intelligence\n\n**Indications:** ${ziihera?.indications.join(', ')}\n**Stage:** ${ziihera?.stage}\n\n${ziiheraKits.map(k =>
+      `### ${k.name}\n${k.aiSummaryCurrent}`
+    ).join('\n\n')}\n\nAsk about pre-launch KOL engagement, bispecific mechanism perception, or share-of-voice vs Enhertu for more detail.`;
+  }
+
+  // Congress
+  if (
+    q.includes('congress') || q.includes('conference') || q.includes('asco') ||
+    q.includes('esmo') || q.includes('sno') || q.includes('abstract')
+  ) {
+    const available = CONGRESS_OPTIONS.filter(c => c.available);
+    return `## Congress Intelligence\n\n${available.map(c =>
+      `### ${c.name}\n- Status: Active / Recent`
+    ).join('\n\n')}\n\nSocial signal velocity from ASCO 2025 has been the primary driver of KIT growth this cycle — particularly for Ziihera's bispecific mechanism narrative and Modeyso pediatric data discussions.`;
+  }
+
+  // Default
+  return `## Auri Intelligence Summary — ${CLIENT.name}\n\nI can help you with intelligence across ${CLIENT.franchiseDescription}. Key areas this cycle:\n\n- **Signal Velocity** — ${KIT_SCORECARDS.length} KITs tracked; portfolio social volume +107% this quarter\n- **KOL Alignment** — Public–private divergence detected; Merchant (78→49) is the priority case\n- **Strategic Insights** — ${INSIGHTS.length} active insights mapped to Medical Objectives\n- **Actions** — ${ACTIONS.length} recommended actions across Field Medical, Digital MA, and HEOR\n- **Products** — Modeyso (H3 K27M DMG, launched) · Ziihera (HER2+ BTC/GEC, pre-launch)\n\nTry asking about KOL alignment gaps, Ziihera pre-launch readiness, social signal velocity, H3 K27M testing barriers, or recommended actions for this cycle.`;
 }
 
 export async function queryAuri(messages, selectedProduct) {
@@ -114,7 +124,6 @@ export async function queryAuri(messages, selectedProduct) {
   const ragContext = retrieveContext(lastMessage, selectedProduct);
   const systemPrompt = buildSystemPrompt(selectedProduct, ragContext);
 
-  // Claude → OpenAI → Keyword fallback
   try {
     return await queryClaudeAPI(messages, systemPrompt);
   } catch (e) {
